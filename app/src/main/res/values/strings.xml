@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My awesome chat</string>
+    <string name="app_login">Login chat</string>
+    <string name="hint_email">Correo electrónico</string>
+    <string name="password">Password</string>
+    <string name="action_sign_in_ime">Loguear</string>
+    <string name="login">Ingresar</string>
+    <string name="register">Registrar</string>
+    <string name="appTittle">Ichat</string>
+</resources>
