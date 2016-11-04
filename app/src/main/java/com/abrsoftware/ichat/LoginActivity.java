@@ -18,6 +18,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         textTitle = (TextView)findViewById(R.id.textTittle);
+        loginBtn = (Button)findViewById(R.id.btn_login);
+        textTitle = (Button)findViewById(R.id.btn_login);
         textTitle.setTypeface(Typeface.createFromAsset(this.getAssets(), "fonts/fjalla_on.otf"));
     }
 
@@ -26,5 +28,4 @@ public class LoginActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.app_login));
         setSupportActionBar(toolbar);
     }
-
 }
