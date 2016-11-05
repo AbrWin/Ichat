@@ -1,11 +1,10 @@
-package com.abrsoftware.ichat.helper;
+package com.abrsoftware.ichat.domain;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.utilities.ParsedUrl;
 
 import java.util.HashMap;
 import java.util.Map;
