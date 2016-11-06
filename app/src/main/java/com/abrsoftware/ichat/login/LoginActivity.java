@@ -15,37 +15,50 @@ import android.widget.TextView;
 
 import com.abrsoftware.ichat.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
 
-    private Button loginBtn;
-    private Button registerBtn;
-    private TextView textTitle;
-    private LinearLayout mLoginContent;
-    private ProgressBar mProgressBar;
-    private TextInputEditText inputEmail;
-    private TextInputEditText inputPassword;
-    private TextInputLayout mMailError;
-    private TextInputLayout mPasswordError;
-    private LoginMvp.Presenter logiPresenter;
+    @BindView(R.id.btn_login)
+    public Button loginBtn;
+    @BindView(R.id.btn_register)
+    public Button registerBtn;
+
+    @BindView(R.id.textTittle)
+    public TextView textTitle;
+
+    @BindView(R.id.login_content)
+    public LinearLayout mLoginContent;
+    @BindView(R.id.login_progress)
+    public ProgressBar mProgressBar;
+
+    @BindView(R.id.tv_mail)
+    public TextInputEditText inputEmail;
+    @BindView(R.id.tv_password)
+    public TextInputEditText inputPassword;
+
+    @BindView(R.id.til_email_error)
+    public TextInputLayout mMailError;
+    @BindView(R.id.til_password_error)
+    public TextInputLayout mPasswordError;
+
+    private LoginMvp.Presenter loginPresenter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
-        textTitle = (TextView) findViewById(R.id.textTittle);
-        loginBtn = (Button) findViewById(R.id.btn_login);
-        registerBtn = (Button) findViewById(R.id.btn_login);
-
-        mLoginContent = (LinearLayout) findViewById(R.id.login_content);
-        mProgressBar = (ProgressBar) findViewById(R.id.login_progress);
-
-        inputEmail = (TextInputEditText) findViewById(R.id.tv_mail);
-        inputPassword = (TextInputEditText) findViewById(R.id.tv_password);
         mMailError = (TextInputLayout) findViewById(R.id.til_email_error);
         mPasswordError = (TextInputLayout) findViewById(R.id.til_password_error);
 
+        loginPresenter = new LoginPresenterImp(this, getApplicationContext());
+        //Check if user is authenticated
+        loginPresenter.checkForAuthenticatedUser();
         textTitle.setTypeface(Typeface.createFromAsset(this.getAssets(), "fonts/fjalla_on.otf"));
     }
 
@@ -56,33 +69,23 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     }
 
     @Override
-    public void enableInputs() {
-        setInputs(true);
-    }
-
-    @Override
-    public void disableImputs() {
-        setInputs(false);
-    }
-
-    @Override
     public void showProgressbar(boolean show) {
-        if (show) {
-            mProgressBar.setVisibility(View.VISIBLE);
-        } else {
-            mProgressBar.setVisibility(View.GONE);
-        }
+        textTitle.setText(getString(R.string.init_session));
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoginContent.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
+    @OnClick(R.id.btn_register)
     @Override
     public void handleSignUp() {
-        logiPresenter.registerNewUser(inputEmail.getText().toString(), inputPassword.getText().toString());
+        loginPresenter.registerNewUser(inputEmail.getText().toString(), inputPassword.getText().toString());
 
     }
 
+    @OnClick(R.id.btn_login)
     @Override
     public void handleSignIn() {
-        logiPresenter.validateLogin(inputEmail.getText().toString(), inputPassword.getText().toString());
+        loginPresenter.validateLogin(inputEmail.getText().toString(), inputPassword.getText().toString());
     }
 
     @Override
@@ -91,9 +94,15 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     }
 
     @Override
-    public void loginError(String error) {
+    public void setMailError(String error) {
         inputEmail.setText("");
         mMailError.setError(error);
+    }
+
+    @Override
+    public void setPasswordError(String error) {
+        inputEmail.setText("");
+        mPasswordError.setError(error);
     }
 
     @Override
@@ -102,15 +111,15 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     }
 
     @Override
-    public void newUserError(String error) {
+    public void onSingnError(String error) {
         inputEmail.setText("");
-        mMailError.setError(error);
+        inputPassword.setText("");
     }
 
-    private void setInputs(boolean enabled) {
-        loginBtn.setEnabled(enabled);
-        registerBtn.setEnabled(enabled);
-        inputEmail.setEnabled(enabled);
-        inputPassword.setEnabled(true);
+    @Override
+    public void newUserError(String error) {
+        inputEmail.setText("");
+        inputPassword.setText("");
     }
+
 }

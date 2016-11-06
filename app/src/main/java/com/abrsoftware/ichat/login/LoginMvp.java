@@ -6,10 +6,6 @@ package com.abrsoftware.ichat.login;
 
 public interface LoginMvp {
     interface View {
-        void enableInputs();
-
-        void disableImputs();
-
         void showProgressbar(boolean show);
 
         void handleSignUp();
@@ -18,9 +14,13 @@ public interface LoginMvp {
 
         void navigateMainScree();
 
-        void loginError(String error);
+        void setMailError(String error);
+
+        void setPasswordError(String error);
 
         void newUserSucces();
+
+        void onSingnError(String error);
 
         void newUserError(String error);
     }

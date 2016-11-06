@@ -6,6 +6,6 @@ package com.abrsoftware.ichat.login;
 
 public interface LoginRepository {
     void checkSession();
-    void doSignUp(String email, String password);
-    void doSignIn(String email, String password);
+    void signUp(String email, String password);
+    void signIn(String email, String password);
 }
