@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abrsoftware.ichat.R;
 
@@ -57,9 +58,18 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
         mPasswordError = (TextInputLayout) findViewById(R.id.til_password_error);
 
         loginPresenter = new LoginPresenterImp(this, getApplicationContext());
+        //Register the event from presenter implementation
+        loginPresenter.oncreate();
         //Check if user is authenticated
         loginPresenter.checkForAuthenticatedUser();
+        textTitle.setText(getString(R.string.appTittle));
         textTitle.setTypeface(Typeface.createFromAsset(this.getAssets(), "fonts/fjalla_on.otf"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loginPresenter.onDestroy();
     }
 
     public void setToolbar() {
@@ -96,12 +106,10 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     @Override
     public void setMailError(String error) {
         inputEmail.setText("");
-        mMailError.setError(error);
     }
 
     @Override
     public void setPasswordError(String error) {
-        inputEmail.setText("");
         mPasswordError.setError(error);
     }
 
@@ -111,15 +119,18 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     }
 
     @Override
-    public void onSingnError(String error) {
+    public void onSingInError(String error) {
         inputEmail.setText("");
         inputPassword.setText("");
+        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void newUserError(String error) {
+    public void onSingUpError(String error) {
         inputEmail.setText("");
         inputPassword.setText("");
+        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
     }
+
 
 }

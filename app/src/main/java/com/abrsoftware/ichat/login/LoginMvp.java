@@ -1,5 +1,9 @@
 package com.abrsoftware.ichat.login;
 
+import android.content.Context;
+
+import com.abrsoftware.ichat.login.eventLogin.LoginEvent;
+
 /**
  * Created by AbrWin on 04/11/16.
  */
@@ -20,12 +24,14 @@ public interface LoginMvp {
 
         void newUserSucces();
 
-        void onSingnError(String error);
+        void onSingInError(String error);
 
-        void newUserError(String error);
+        void onSingUpError(String error);
     }
 
     interface Presenter {
+        void oncreate();
+
         void onDestroy();
 
         void checkForAuthenticatedUser();
@@ -33,6 +39,8 @@ public interface LoginMvp {
         void validateLogin(String email, String password);
 
         void registerNewUser(String email, String password);
+
+        void onEventMainThread(LoginEvent event);
     }
 
 }

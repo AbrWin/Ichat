@@ -10,5 +10,6 @@
     <string name="register_user_successful">¡Se registro correctamente a el usuario!</string>
     <string name="error_mail">Escribe tu mail correctamente</string>
     <string name="error_mail_not_valid">Correo no válido</string>
+    <string name="error_password_not_valid">Password no válido</string>
     <string name="init_session">Iniciando sesión...</string>
 </resources>
