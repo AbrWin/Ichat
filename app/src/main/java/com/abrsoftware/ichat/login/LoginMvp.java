@@ -27,6 +27,12 @@ public interface LoginMvp {
         void onSingInError(String error);
 
         void onSingUpError(String error);
+
+        void onErrorConnection(String error);
+
+        void showGooglePlayServicesError();
+
+        void showGooglePlayServicesDialog(int statusCode);
     }
 
     interface Presenter {
@@ -36,9 +42,9 @@ public interface LoginMvp {
 
         void checkForAuthenticatedUser();
 
-        void validateLogin(String email, String password);
+        void validateLogin(String email, String password, Context context);
 
-        void registerNewUser(String email, String password);
+        void registerNewUser(String email, String password, Context context);
 
         void onEventMainThread(LoginEvent event);
     }

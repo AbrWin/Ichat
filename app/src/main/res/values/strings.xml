@@ -12,4 +12,5 @@
     <string name="error_mail_not_valid">Correo no válido</string>
     <string name="error_password_not_valid">Password no válido</string>
     <string name="init_session">Iniciando sesión...</string>
-</resources>
+    <string name="error_connection">¡Ups! Tienes un problema de conexión...</string>
+    </resources>

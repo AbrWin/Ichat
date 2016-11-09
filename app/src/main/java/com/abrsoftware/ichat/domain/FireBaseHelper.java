@@ -1,10 +1,8 @@
 package com.abrsoftware.ichat.domain;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.abrsoftware.ichat.entities.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +12,7 @@ import java.util.Map;
  */
 
 public class FireBaseHelper {
-    private Firebase dataReference;
+    private FirebaseAuth dataReference;
     private final static String SEPARATOR = "__";
     private final static String USERS_PATH = "users";
     private final static String CONTACS_PATH = "contacts";
@@ -30,15 +28,15 @@ public class FireBaseHelper {
     }
 
     public FireBaseHelper() {
-        this.dataReference = new Firebase(FIREBASE_URL);
+        this.dataReference = FirebaseAuth.getInstance();
     }
 
-    public Firebase getDataReference() {
+    public FirebaseAuth getDataReference() {
         return dataReference;
     }
 
     public String getAuthUserEmail() {
-        AuthData authData = dataReference.getAuth();
+        dataReference.signInWithEmailAndPassword()
         String mail = null;
         if (authData != null) {
             Map<String, Object> providerData = authData.getProviderData();
@@ -98,7 +96,7 @@ public class FireBaseHelper {
     }
 
     public void signOff(){
-        notifyContactsOfConnectionChange(false, true);
+        notifyContactsOfConnectionChange(User.OFFLINE, true);
     }
 
     private void notifyContactsOfConnectionChange(final boolean online, final boolean signOff){

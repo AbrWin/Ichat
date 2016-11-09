@@ -1,5 +1,7 @@
 package com.abrsoftware.ichat.login;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -15,12 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abrsoftware.ichat.R;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
+    public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1;
 
     @BindView(R.id.btn_login)
     public Button loginBtn;
@@ -46,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     public TextInputLayout mPasswordError;
 
     private LoginMvp.Presenter loginPresenter;
+    private Context context;
 
 
     @Override
@@ -53,11 +58,11 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+        context = getApplicationContext();
         mMailError = (TextInputLayout) findViewById(R.id.til_email_error);
         mPasswordError = (TextInputLayout) findViewById(R.id.til_password_error);
 
-        loginPresenter = new LoginPresenterImp(this, getApplicationContext());
+        loginPresenter = new LoginPresenterImp(this);
         //Register the event from presenter implementation
         loginPresenter.oncreate();
         //Check if user is authenticated
@@ -88,14 +93,14 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     @OnClick(R.id.btn_register)
     @Override
     public void handleSignUp() {
-        loginPresenter.registerNewUser(inputEmail.getText().toString(), inputPassword.getText().toString());
+        loginPresenter.registerNewUser(inputEmail.getText().toString(), inputPassword.getText().toString(), context);
 
     }
 
     @OnClick(R.id.btn_login)
     @Override
     public void handleSignIn() {
-        loginPresenter.validateLogin(inputEmail.getText().toString(), inputPassword.getText().toString());
+        loginPresenter.validateLogin(inputEmail.getText().toString(), inputPassword.getText().toString(), context);
     }
 
     @Override
@@ -122,15 +127,35 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     public void onSingInError(String error) {
         inputEmail.setText("");
         inputPassword.setText("");
-        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSingUpError(String error) {
         inputEmail.setText("");
         inputPassword.setText("");
-        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onErrorConnection(String error) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void showGooglePlayServicesError() {
+        Toast.makeText(context,
+                "Se requiere Google Play Services para usar la app", Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void showGooglePlayServicesDialog(int statusCode) {
+        showPlayServicesErrorDialog(statusCode);
+    }
+
+    private void showPlayServicesErrorDialog(int codeError){
+        Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(LoginActivity.this, codeError,REQUEST_GOOGLE_PLAY_SERVICES );
+        dialog.show();
+    }
 }

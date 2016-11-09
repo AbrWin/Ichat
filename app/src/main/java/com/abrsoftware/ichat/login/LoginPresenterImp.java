@@ -20,12 +20,10 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
     private Eventbus eventbus;
     private LoginMvp.View loginView;
     private LoginInteractor loginInteractor;
-    private Context context;
 
-    public LoginPresenterImp(LoginMvp.View loginView, Context context) {
+    public LoginPresenterImp(LoginMvp.View loginView) {
         this.loginView = loginView;
         this.loginInteractor = new LoginInteractorImp();
-        this.context = context;
         this.eventbus = GreenRobotEventBus.getInstance();
     }
 
@@ -46,24 +44,14 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
     @Override
     public void checkForAuthenticatedUser() {
         if(loginView != null){
-            //loginView.showProgressbar(true);
-            loginInteractor.checkSession();
+            loginView.showProgressbar(true);
         }
+        loginInteractor.checkSession();
     }
 
     //Inicia sesion
     @Override
-    public void validateLogin(String email, String password) {
-        if(loginView != null){
-            //loginView.showProgressbar(true);
-            loginInteractor.checkSession();
-        }
-        loginInteractor.doSignIn(email, password);
-    }
-
-    //Registra nuevo usuario
-    @Override
-    public void registerNewUser(String email, String password) {
+    public void validateLogin(String email, String password, Context context) {
         if(loginView != null){
             if(email.trim().isEmpty()){
                 loginView.setMailError(context.getString(R.string.error_mail));
@@ -73,10 +61,27 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
                 loginView.setPasswordError(context.getString(R.string.error_password_not_valid));
             }else{
                 loginView.showProgressbar(true);
-                loginInteractor.checkSession();
+                loginInteractor.doSignIn(email, password, context);
             }
         }
-        loginInteractor.doSignUp(email, password);
+    }
+
+    //Registra nuevo usuario
+    @Override
+    public void registerNewUser(String email, String password, Context context) {
+        if(loginView != null){
+            if(email.trim().isEmpty()){
+                loginView.setMailError(context.getString(R.string.error_mail));
+            }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                loginView.setMailError(context.getString(R.string.error_mail_not_valid));
+            }else if(password.trim().isEmpty()){
+                loginView.setPasswordError(context.getString(R.string.error_password_not_valid));
+            }else{
+                loginView.showProgressbar(true);
+                loginInteractor.doSignUp(email, password, context);
+            }
+        }
+
     }
 
     @Subscribe
@@ -95,11 +100,22 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
             case LoginEvent.onSignUpError:
                 onSingUpSuccessError(event.getErrorMessage());
                 break;
+            case LoginEvent.onFailedConnection:
+                onErrorConnection(event.getErrorMessage());
+                break;
+            case LoginEvent.onBeUserResolvableError:
+                showGooglePlayServicesDialog(event.getStatusCode());
+                break;
+            case LoginEvent.onGooglePlayServicesFailed:
+                showGooglePlayServicesError();
+                break;
             case LoginEvent.onFailedToRecoverSession:
-                //onFailedToRecoverSession();
+                onFailedToRecoverSession();
                 break;
         }
     }
+
+
 
     private void onFailedToRecoverSession(){
         if(loginView != null){
@@ -134,4 +150,24 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
         }
     }
 
+    private void onErrorConnection(String error){
+        if(loginView != null){
+            loginView.showProgressbar(false);
+            loginView.onErrorConnection(error);
+        }
+    }
+
+    private void showGooglePlayServicesError() {
+        if(loginView != null){
+            loginView.showProgressbar(false);
+            loginView.showGooglePlayServicesError();
+        }
+    }
+
+    private void showGooglePlayServicesDialog(int statusCode) {
+        if(loginView != null){
+            loginView.showProgressbar(false);
+            loginView.showGooglePlayServicesDialog(statusCode);
+        }
+    }
 }
