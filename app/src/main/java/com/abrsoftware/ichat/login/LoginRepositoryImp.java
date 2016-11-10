@@ -3,13 +3,13 @@ package com.abrsoftware.ichat.login;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Patterns;
 
 import com.abrsoftware.ichat.R;
 import com.abrsoftware.ichat.domain.FireBaseHelper;
 import com.abrsoftware.ichat.lib.Eventbus;
 import com.abrsoftware.ichat.lib.GreenRobotEventBus;
 import com.abrsoftware.ichat.login.eventLogin.LoginEvent;
-import com.abrsoftware.ichat.entities.User;
 import com.abrsoftware.ichat.utils.Connectivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -38,13 +38,36 @@ public class LoginRepositoryImp implements LoginRepository {
     @Override
     public void checkSession() {
         Log.d("@@" + TAG, "checkSession");
-        postEvent(LoginEvent.onFailedToRecoverSession);
+        if(myUserReference != null){
+            postEvent(LoginEvent.onSignInSucces ,myUserReference.getEmail());
+        }else{
+            postEvent(LoginEvent.onFailedToRecoverSession);
+        }
     }
 
     @Override
     public void signUp(String email, String password, Context context) {
-
         Log.d("@@" + TAG, "signup");
+        //Check is network is avaliable
+        if (!Connectivity.isOnline(context)) {
+            postEvent(LoginEvent.onFailedConnectionNetwork, context.getString(R.string.error_connection));
+        }
+
+        //Check GooglePlayServices
+        if(!isGooglePlayServicesAvaliable(context)){
+            return;
+        }
+
+        if(email.trim().isEmpty()){
+            postEvent(LoginEvent.onShowErrorEmail, context.getString(R.string.error_mail));
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            postEvent(LoginEvent.onShowErrorEmail, context.getString(R.string.error_mail_not_valid));
+        }else if(password.trim().isEmpty()){
+            postEvent(LoginEvent.onShowErrorPassword, context.getString(R.string.error_password_not_valid));
+        }else{
+            //Check Authentication in FireBase;
+            doSignUp(email, password, context);
+        }
     }
 
     @Override
@@ -53,7 +76,7 @@ public class LoginRepositoryImp implements LoginRepository {
 
         //Check is network is avaliable
         if (!Connectivity.isOnline(context)) {
-            postEvent(LoginEvent.onFailedConnection, context.getString(R.string.error_connection));
+            postEvent(LoginEvent.onFailedConnectionNetwork, context.getString(R.string.error_connection));
         }
 
         //Check GooglePlayServices
@@ -61,9 +84,16 @@ public class LoginRepositoryImp implements LoginRepository {
             return;
         }
 
-        //Check Authentication in FireBase;
-        doSignIn(email, password);
-
+        if(email.trim().isEmpty()){
+            postEvent(LoginEvent.onShowErrorEmail, context.getString(R.string.error_mail));
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            postEvent(LoginEvent.onShowErrorEmail, context.getString(R.string.error_mail_not_valid));
+        }else if(password.trim().isEmpty()){
+            postEvent(LoginEvent.onShowErrorPassword, context.getString(R.string.error_password_not_valid));
+        }else{
+            //Check Authentication in FireBase;
+            doSignIn(email, password, context);
+        }
     }
 
     //Set only the event
@@ -103,11 +133,29 @@ public class LoginRepositoryImp implements LoginRepository {
         return true;
     }
 
-    private void doSignIn(String email, String password) {
+    private void doSignIn(String email, String password, final Context context) {
         dataReference.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                if(!task.isSuccessful()){
+                    postEvent(LoginEvent.onSignInError, context.getString(R.string.error_signin));
+                }else {
+                    postEvent(LoginEvent.onSignInSucces, "Inicio sesion");
+                }
 
+            }
+        });
+    }
+
+    private void doSignUp(String email, String password, final Context context){
+        dataReference.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(!task.isSuccessful()){
+                    postEvent(LoginEvent.onSignInError, context.getString(R.string.error_signup));
+                }else {
+                    postEvent(LoginEvent.onSignInSucces, "Inicio sesion");
+                }
             }
         });
     }

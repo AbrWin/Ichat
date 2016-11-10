@@ -16,7 +16,7 @@ public interface LoginMvp {
 
         void handleSignIn();
 
-        void navigateMainScree();
+        void navigateMainScree(String msg);
 
         void setMailError(String error);
 

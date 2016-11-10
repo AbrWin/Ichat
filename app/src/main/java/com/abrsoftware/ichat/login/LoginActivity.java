@@ -9,6 +9,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -85,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
 
     @Override
     public void showProgressbar(boolean show) {
-        textTitle.setText(getString(R.string.init_session));
+        textTitle.setText(getString(show ? R.string.init_session : R.string.appTittle));
         mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginContent.setVisibility(show ? View.GONE : View.VISIBLE);
     }
@@ -104,13 +106,16 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     }
 
     @Override
-    public void navigateMainScree() {
+    public void navigateMainScree(String msg) {
         //Go to HomeScreen
+        Log.d("msj", msg);
+        //Snackbar.make(mLoginContent, msg, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void setMailError(String error) {
         inputEmail.setText("");
+        mMailError.setError(error);
     }
 
     @Override
@@ -157,5 +162,9 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     private void showPlayServicesErrorDialog(int codeError){
         Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(LoginActivity.this, codeError,REQUEST_GOOGLE_PLAY_SERVICES );
         dialog.show();
+    }
+
+    private void customizeSnackBar(String txt){
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
     }
 }

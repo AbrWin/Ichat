@@ -13,4 +13,6 @@
     <string name="error_password_not_valid">Password no válido</string>
     <string name="init_session">Iniciando sesión...</string>
     <string name="error_connection">¡Ups! Tienes un problema de conexión...</string>
+    <string name="error_signin">¡Ups! No hemos podido iniciar tu sesion</string>
+    <string name="error_signup">¡Ups! No hemos podido crear este usuario</string>
     </resources>

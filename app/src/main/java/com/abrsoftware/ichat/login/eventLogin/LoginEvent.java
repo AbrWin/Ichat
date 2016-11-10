@@ -10,9 +10,11 @@ public class LoginEvent {
     public final static int onSignInSucces = 2;
     public final static int onSignUpSuccess = 3;
     public final static int onFailedToRecoverSession = 4;
-    public final static int onFailedConnection = 5;
+    public final static int onFailedConnectionNetwork = 5;
     public final static int onBeUserResolvableError = 6;
     public final static int onGooglePlayServicesFailed = 7;
+    public final static int onShowErrorEmail = 8;
+    public final static int onShowErrorPassword = 9;
 
     private int eventType;
     private String errorMessage;

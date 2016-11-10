@@ -45,24 +45,16 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
     public void checkForAuthenticatedUser() {
         if(loginView != null){
             loginView.showProgressbar(true);
+            loginInteractor.checkSession();
         }
-        loginInteractor.checkSession();
     }
 
     //Inicia sesion
     @Override
     public void validateLogin(String email, String password, Context context) {
-        if(loginView != null){
-            if(email.trim().isEmpty()){
-                loginView.setMailError(context.getString(R.string.error_mail));
-            }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                loginView.setMailError(context.getString(R.string.error_mail_not_valid));
-            }else if(password.trim().isEmpty()){
-                loginView.setPasswordError(context.getString(R.string.error_password_not_valid));
-            }else{
-                loginView.showProgressbar(true);
-                loginInteractor.doSignIn(email, password, context);
-            }
+        if (loginView != null) {
+            loginView.showProgressbar(true);
+            loginInteractor.doSignIn(email, password, context);
         }
     }
 
@@ -89,7 +81,7 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
     public void onEventMainThread(LoginEvent event) {
         switch (event.getEventType()){
             case LoginEvent.onSignInSucces:
-                onSignInSuccess();
+                onSignInSuccess(event.getErrorMessage());
                 break;
             case LoginEvent.onSignInError:
                 onSignInSuccessError(event.getErrorMessage());
@@ -100,7 +92,7 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
             case LoginEvent.onSignUpError:
                 onSingUpSuccessError(event.getErrorMessage());
                 break;
-            case LoginEvent.onFailedConnection:
+            case LoginEvent.onFailedConnectionNetwork:
                 onErrorConnection(event.getErrorMessage());
                 break;
             case LoginEvent.onBeUserResolvableError:
@@ -112,6 +104,11 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
             case LoginEvent.onFailedToRecoverSession:
                 onFailedToRecoverSession();
                 break;
+            case LoginEvent.onShowErrorEmail:
+                showErrorEmail(event.getErrorMessage());
+                break;
+            case LoginEvent.onShowErrorPassword:
+                showErrorPassword(event.getErrorMessage());
         }
     }
 
@@ -124,14 +121,16 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
         Log.d("@@"+TAG,"Error in recovery session");
     }
 
-    private void onSignInSuccess(){
+    private void onSignInSuccess(String msg){
         if(loginView != null){
-            loginView.navigateMainScree();
+            loginView.showProgressbar(false);
+            loginView.navigateMainScree(msg);
         }
     }
 
     private void onSingUpSuccess(){
         if(loginView != null){
+            loginView.showProgressbar(false);
             loginView.newUserSucces();
         }
     }
@@ -169,5 +168,15 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
             loginView.showProgressbar(false);
             loginView.showGooglePlayServicesDialog(statusCode);
         }
+    }
+
+    private void showErrorEmail(String error){
+        loginView.showProgressbar(false);
+        loginView.setMailError(error);
+    }
+
+    private void showErrorPassword(String error){
+        loginView.showProgressbar(false);
+        loginView.setPasswordError(error);
     }
 }

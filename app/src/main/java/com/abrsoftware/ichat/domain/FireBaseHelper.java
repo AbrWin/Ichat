@@ -35,8 +35,8 @@ public class FireBaseHelper {
         return dataReference;
     }
 
-    public String getAuthUserEmail() {
-        dataReference.signInWithEmailAndPassword()
+    /*public String getAuthUserEmail() {
+        dataReference.signInWithEmailAndPassword();
         String mail = null;
         if (authData != null) {
             Map<String, Object> providerData = authData.getProviderData();
@@ -119,5 +119,5 @@ public class FireBaseHelper {
                 System.out.println(firebaseError.getMessage());
             }
         });
-    }
+    }*/
 }
