@@ -15,4 +15,7 @@
     <string name="error_connection">¡Ups! Tienes un problema de conexión...</string>
     <string name="error_signin">¡Ups! No hemos podido iniciar tu sesion</string>
     <string name="error_signup">¡Ups! No hemos podido crear este usuario</string>
-    </resources>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

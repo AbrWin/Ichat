@@ -69,7 +69,6 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
         loginPresenter.oncreate();
         //Check if user is authenticated
         loginPresenter.checkForAuthenticatedUser();
-        textTitle.setText(getString(R.string.appTittle));
         textTitle.setTypeface(Typeface.createFromAsset(this.getAssets(), "fonts/fjalla_on.otf"));
     }
 

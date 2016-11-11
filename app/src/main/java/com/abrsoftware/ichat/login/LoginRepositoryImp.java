@@ -7,6 +7,7 @@ import android.util.Patterns;
 
 import com.abrsoftware.ichat.R;
 import com.abrsoftware.ichat.domain.FireBaseHelper;
+import com.abrsoftware.ichat.entities.User;
 import com.abrsoftware.ichat.lib.Eventbus;
 import com.abrsoftware.ichat.lib.GreenRobotEventBus;
 import com.abrsoftware.ichat.login.eventLogin.LoginEvent;
@@ -18,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by abrwin on 05/11/2016.
@@ -26,20 +29,22 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginRepositoryImp implements LoginRepository {
     private final String TAG = LoginRepository.class.getSimpleName();
     private FireBaseHelper helper;
-    private FirebaseAuth dataReference;
-    private FirebaseUser myUserReference;
+    private FirebaseAuth authReference;
+    private FirebaseUser userReference;
+    private FirebaseDatabase dataBaseReference;
 
     public LoginRepositoryImp() {
         this.helper = FireBaseHelper.getInstance();
-        this.dataReference = helper.getDataReference();
-        this.myUserReference = helper.getDataReference().getCurrentUser();
+        this.authReference = helper.getAuthReference();
+        this.dataBaseReference = helper.getDatabaseReference();
+        this.userReference = helper.getAuthReference().getCurrentUser();
     }
 
     @Override
     public void checkSession() {
         Log.d("@@" + TAG, "checkSession");
-        if(myUserReference != null){
-            postEvent(LoginEvent.onSignInSucces ,myUserReference.getEmail());
+        if(userReference != null){
+            postEvent(LoginEvent.onSignInSucces , userReference.getEmail());
         }else{
             postEvent(LoginEvent.onFailedToRecoverSession);
         }
@@ -134,7 +139,7 @@ public class LoginRepositoryImp implements LoginRepository {
     }
 
     private void doSignIn(String email, String password, final Context context) {
-        dataReference.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        authReference.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(!task.isSuccessful()){
@@ -147,13 +152,19 @@ public class LoginRepositoryImp implements LoginRepository {
         });
     }
 
-    private void doSignUp(String email, String password, final Context context){
-        dataReference.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    private void doSignUp(final String email, String password, final Context context){
+        authReference.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(!task.isSuccessful()){
                     postEvent(LoginEvent.onSignInError, context.getString(R.string.error_signup));
                 }else {
+                    DatabaseReference mDatabase = dataBaseReference.getReference().child("users");
+                    String useriD= mDatabase.push().getKey();
+                    User currentUser = new User();
+                    currentUser.setEmail(email);
+                    currentUser.setOnline(true);
+                    mDatabase.child(useriD).setValue(currentUser);
                     postEvent(LoginEvent.onSignInSucces, "Inicio sesion");
                 }
             }
