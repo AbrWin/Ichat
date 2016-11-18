@@ -160,11 +160,12 @@ public class LoginRepositoryImp implements LoginRepository {
                     postEvent(LoginEvent.onSignInError, context.getString(R.string.error_signup));
                 }else {
                     DatabaseReference mDatabase = dataBaseReference.getReference().child("users");
-                    String useriD= mDatabase.push().getKey();
+                    //String useriD= mDatabase.push().getKey();
                     User currentUser = new User();
                     currentUser.setEmail(email);
                     currentUser.setOnline(true);
-                    mDatabase.child(useriD).setValue(currentUser);
+                    String keyEmail = email.replace(".","_");
+                    mDatabase.child(keyEmail).setValue(currentUser);
                     postEvent(LoginEvent.onSignInSucces, "Inicio sesion");
                 }
             }

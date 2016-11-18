@@ -10,6 +10,7 @@ public class User {
     String email;
     boolean online;
     Map<String, Boolean> contacts;
+    String urlImge;
     public static boolean ONLINE = true;
     public static boolean OFFLINE = false;
 
@@ -38,5 +39,13 @@ public class User {
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+
+    public String getUrlImge() {
+        return urlImge;
+    }
+
+    public void setUrlImge(String urlImge) {
+        this.urlImge = urlImge;
     }
 }
