@@ -20,5 +20,6 @@
     <string name="status_offline">offline</string>
     <string name="email">E-mail</string>
     <string name="img">img</string>
-    <string name="empty_recycler">Ups! Aun no hay contactos agregados \n <b>Agrega contactos </b></string>
+    <string name="title_home">My home</string>
+    <string name="empty_recycler">¡Ups! Aun no tienes contactos\n <b>¡Empieza a agregar! </b></string>
 </resources>

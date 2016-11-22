@@ -123,7 +123,6 @@ public class LoginPresenterImp implements LoginMvp.Presenter {
 
     private void onSignInSuccess(String msg){
         if(loginView != null){
-            loginView.showProgressbar(false);
             loginView.navigateMainScree(msg);
         }
     }

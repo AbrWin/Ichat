@@ -3,12 +3,12 @@ package com.abrsoftware.ichat.login;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import com.abrsoftware.ichat.R;
+import com.abrsoftware.ichat.contact.ViewContactFragment;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import butterknife.BindView;
@@ -78,12 +80,6 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
         loginPresenter.onDestroy();
     }
 
-    public void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_login));
-        setSupportActionBar(toolbar);
-    }
-
     @Override
     public void showProgressbar(boolean show) {
         textTitle.setText(getString(show ? R.string.init_session : R.string.appTittle));
@@ -106,9 +102,8 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
 
     @Override
     public void navigateMainScree(String msg) {
-        //Go to HomeScreen
         Log.d("msj", msg);
-        //Snackbar.make(mLoginContent, msg, Snackbar.LENGTH_SHORT).show();
+        sendToHome();
     }
 
     @Override
@@ -165,5 +160,23 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
 
     private void customizeSnackBar(String txt){
         LayoutInflater layoutInflater = LayoutInflater.from(context);
+    }
+
+    private void sendToHome(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Go to HomeScreen
+                //Snackbar.make(mLoginContent, msg, Snackbar.LENGTH_SHORT).show();
+                ViewContactFragment contactFragment = new ViewContactFragment();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = manager.beginTransaction();
+                fragmentTransaction.remove(contactFragment);
+                fragmentTransaction.add(android.R.id.content, contactFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        },1000);
     }
 }
