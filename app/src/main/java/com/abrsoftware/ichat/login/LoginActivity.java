@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -20,36 +21,42 @@ import android.widget.Toast;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import com.abrsoftware.ichat.R;
-import com.abrsoftware.ichat.contact.ViewContactFragment;
+import com.abrsoftware.ichat.contact.viewContact.ViewContactFragment;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1;
 
-    @BindView(R.id.btn_login)
-    public Button loginBtn;
-    @BindView(R.id.btn_register)
-    public Button registerBtn;
-
+    @Nullable
     @BindView(R.id.textTittle)
     public TextView textTitle;
 
+    @Nullable
     @BindView(R.id.login_content)
     public LinearLayout mLoginContent;
+
+    @Nullable
     @BindView(R.id.login_progress)
     public ProgressBar mProgressBar;
 
+    @Nullable
     @BindView(R.id.tv_mail)
     public TextInputEditText inputEmail;
+
+    @Nullable
     @BindView(R.id.tv_password)
     public TextInputEditText inputPassword;
 
+    @Nullable
     @BindView(R.id.til_email_error)
     public TextInputLayout mMailError;
+
+    @Nullable
     @BindView(R.id.til_password_error)
     public TextInputLayout mPasswordError;
 
@@ -63,8 +70,6 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         context = getApplicationContext();
-        mMailError = (TextInputLayout) findViewById(R.id.til_email_error);
-        mPasswordError = (TextInputLayout) findViewById(R.id.til_password_error);
 
         loginPresenter = new LoginPresenterImp(this);
         //Register the event from presenter implementation
@@ -87,6 +92,7 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
         mLoginContent.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
+    @Optional
     @OnClick(R.id.btn_register)
     @Override
     public void handleSignUp() {
@@ -94,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
 
     }
 
+    @Optional
     @OnClick(R.id.btn_login)
     @Override
     public void handleSignIn() {
