@@ -6,6 +6,6 @@ package com.abrsoftware.ichat.contact;
 
 public interface ContactSessionInteractor {
     void singOff();
-    String getCurrentUserMail(String email);
+    String getCurrentUserMail();
     void changeConnectionStatus(boolean status);
 }
