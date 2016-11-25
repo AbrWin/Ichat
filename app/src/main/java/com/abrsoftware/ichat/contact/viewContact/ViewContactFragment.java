@@ -6,33 +6,40 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.abrsoftware.ichat.R;
+import com.abrsoftware.ichat.adapters.ContactListAdapter;
 import com.abrsoftware.ichat.contact.ContactMvp;
+import com.abrsoftware.ichat.contact.ContactPresenterImp;
 import com.abrsoftware.ichat.entities.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
-public class ViewContactFragment extends Fragment implements ContactMvp.View {
+public class ViewContactFragment extends Fragment implements ContactMvp.View, ContactListAdapter.onItemClickListener {
     private ContactMvp.Presenter contactPresenter;
 
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.addContact)
-    FloatingActionButton addContact;
-    @BindView(R.id.reciclador)
-    RecyclerView recyclerContact;
-    @BindView(R.id.empty_contacts_layout)
-    LinearLayout emptyContacts;
+    public Toolbar toolbar;
 
+    @BindView(R.id.reciclador)
+    public RecyclerView recyclerContact;
+
+    @BindView(R.id.empty_contacts_layout)
+    public LinearLayout emptyContacts;
 
     public ViewContactFragment() {
     }
@@ -47,7 +54,9 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_contact, container, false);
         ButterKnife.bind(this, rootView);
-        setToolbar(rootView);
+        contactPresenter = new ContactPresenterImp(this);
+        contactPresenter.onCreate();
+        setToolbar(rootView, contactPresenter.getCurrentUserEmail());
         return rootView;
     }
 
@@ -61,10 +70,22 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View {
         super.onDetach();
     }
 
-    public void setToolbar(View rootView) {
-        toolbar.setTitle(getString(R.string.title_home));
-        toolbar.setTitleTextColor(Color.WHITE);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+    @Override
+    public void onResume() {
+        super.onResume();
+        contactPresenter.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        contactPresenter.onPause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        contactPresenter.onDestroy();
     }
 
     @Override
@@ -80,5 +101,36 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View {
     @Override
     public void onContactRemove(User user) {
 
+    }
+
+    @OnClick(R.id.addContact)
+    public void addContact() {
+        Log.d("msj", "add");
+    }
+
+
+    @Override
+    public void onClick(ContactListAdapter.ContactHolder contactHolder) {
+        contactHolder.contact.getEmail();
+    }
+
+    @Override
+    public void onLongClick() {
+
+    }
+
+    public void setToolbar(View rootView, String title) {
+        toolbar.setTitle(title);
+        toolbar.setTitleTextColor(Color.WHITE);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+    }
+
+    private void setValuesRecycler( ArrayList<User> contactUsers) {
+        if(contactUsers.size() > 0){
+            ContactListAdapter contactListAdapter = new ContactListAdapter(contactUsers, this);
+            emptyContacts.setVisibility(View.GONE);
+            recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerContact.setAdapter(contactListAdapter);
+        }
     }
 }

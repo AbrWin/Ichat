@@ -5,5 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="color_back_content">#E6E6E6</color>
     <color name="color_flbtn">#64FFDA</color>
+    <color name="online_color">#04B486</color>
+    <color name="offline_color">#FF4081</color>
 
 </resources>
