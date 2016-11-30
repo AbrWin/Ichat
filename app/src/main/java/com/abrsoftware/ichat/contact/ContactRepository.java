@@ -5,11 +5,11 @@ package com.abrsoftware.ichat.contact;
  */
 
 public interface ContactRepository {
-    void singOff();
-    String getCurrentUserMail(String email);
+    void signOff();
+    String getCurrentUserMail();
     void changeConnectionStatus(boolean status);
-    void subscribe();
-    void unsubscribe();
+    void subscribeContactLisctEvent();
+    void unsubscribeContactLisctEvent();
     void destroyListener();
     void removeContact(String mail);
 }

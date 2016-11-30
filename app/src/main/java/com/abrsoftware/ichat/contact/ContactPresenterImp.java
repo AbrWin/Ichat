@@ -39,13 +39,13 @@ public class ContactPresenterImp implements ContactMvp.Presenter {
     @Override
     public void onPause() {
         sessionInteractor.changeConnectionStatus(User.OFFLINE);
-        contactInteractor.unsubscribe();
+        contactInteractor.unsubscribeContactLisctEvent();
     }
 
     @Override
     public void onResume() {
         sessionInteractor.changeConnectionStatus(User.ONLINE);
-        contactInteractor.subscribe();
+        contactInteractor.subscribeContactLisctEvent();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ContactPresenterImp implements ContactMvp.Presenter {
     @Override
     public void signOff() {
         sessionInteractor.changeConnectionStatus(User.OFFLINE);
-        contactInteractor.unsubscribe();
+        contactInteractor.unsubscribeContactLisctEvent();
         contactInteractor.destroyListener();
         sessionInteractor.singOff();
     }
