@@ -1,6 +1,7 @@
 package com.abrsoftware.ichat.contact.viewContact;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -61,6 +62,7 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
         ButterKnife.bind(this, rootView);
         contactPresenter = new ContactPresenterImp(this);
         contactPresenter.onCreate();
+        getActivity().setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setToolbar(rootView, contactPresenter.getCurrentUserEmail());
         setAdapter();
         setRecycler();
@@ -138,19 +140,20 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
     }
 
     private void setRecycler( ) {
-        User user = new User();
+        /*User user = new User();
         user.setEmail("hola@hotmail.com");
         user.setOnline(true);
-        user.setUrlImge("https://plus.google.com/u/0/photos/118134043991575768190/albums/profile/6157722707080170066");
+        user.setUrlImge("http://image.freepik.com/free-icon/male-user-shadow_318-34042.jpg");
         List<User> users = new ArrayList<>();
         users.add(user);
         if(users.size()> 0){
-            frameLayout.setVisibility(View.VISIBLE);
-            contactListAdapter = new ContactListAdapter(users, this);
-            emptyContacts.setVisibility(View.GONE);
-            recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerContact.setAdapter(contactListAdapter);
-            contactListAdapter.notifyDataSetChanged();
-        }
+        }*/
+
+        frameLayout.setVisibility(View.VISIBLE);
+        contactListAdapter = new ContactListAdapter(new ArrayList<User>(), this);
+        emptyContacts.setVisibility(View.GONE);
+        recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerContact.setAdapter(contactListAdapter);
+        contactListAdapter.notifyDataSetChanged();
     }
 }
