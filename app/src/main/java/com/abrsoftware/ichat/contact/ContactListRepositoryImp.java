@@ -1,4 +1,4 @@
-package com.abrsoftware.ichat.contact.viewContact;
+package com.abrsoftware.ichat.contact;
 
 import android.text.TextUtils;
 

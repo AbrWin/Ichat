@@ -1,7 +1,5 @@
 package com.abrsoftware.ichat.contact;
 
-import com.abrsoftware.ichat.contact.viewContact.ContactListRepositoryImp;
-
 /**
  * Created by AbrWin on 25/11/16.
  */

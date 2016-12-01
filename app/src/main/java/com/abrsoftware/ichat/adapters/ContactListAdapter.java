@@ -50,6 +50,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         Glide.with(context)
                 .load(holder.contact.getUrlImge())
+                .placeholder(context.getDrawable(R.drawable.common_google_signin_btn_icon_dark))
                 .into(holder.contactImg);
     }
 
@@ -92,7 +93,31 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     public interface onItemClickListener {
         void onClick(ContactHolder contactHolder);
+
         void onLongClick();
     }
+
+    public void add(User user) {
+        if (!values.contains(user)) {
+            values.add(user);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void update(User user) {
+        if (values.contains(user)) {
+            int index = values.indexOf(user);
+            values.set(index, user);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void remove(User user) {
+        if (values.contains(user)) {
+            values.remove(user);
+            notifyDataSetChanged();
+        }
+    }
+
 
 }

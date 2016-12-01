@@ -3,7 +3,6 @@ package com.abrsoftware.ichat.contact.viewContact;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +21,6 @@ import com.abrsoftware.ichat.contact.ContactPresenterImp;
 import com.abrsoftware.ichat.entities.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +39,8 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
     @BindView(R.id.empty_contacts_layout)
     public LinearLayout emptyContacts;
 
+    private ContactListAdapter contactListAdapter;
+
     public ViewContactFragment() {
     }
 
@@ -57,6 +57,8 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
         contactPresenter = new ContactPresenterImp(this);
         contactPresenter.onCreate();
         setToolbar(rootView, contactPresenter.getCurrentUserEmail());
+        setAdapter();
+        setRecycler();
         return rootView;
     }
 
@@ -90,17 +92,17 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
 
     @Override
     public void onContactAdded(User user) {
-
+        contactListAdapter.add(user);
     }
 
     @Override
     public void onContactChanged(User user) {
-
+        contactListAdapter.update(user);
     }
 
     @Override
     public void onContactRemove(User user) {
-
+        contactListAdapter.remove(user);
     }
 
     @OnClick(R.id.addContact)
@@ -125,12 +127,14 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
     }
 
-    private void setValuesRecycler( ArrayList<User> contactUsers) {
-        if(contactUsers.size() > 0){
-            ContactListAdapter contactListAdapter = new ContactListAdapter(contactUsers, this);
-            emptyContacts.setVisibility(View.GONE);
-            recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerContact.setAdapter(contactListAdapter);
-        }
+    private void setAdapter(){
+         contactListAdapter = new ContactListAdapter(new ArrayList<User>(), this);
+
+    }
+
+    private void setRecycler( ) {
+        emptyContacts.setVisibility(View.GONE);
+        recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerContact.setAdapter(contactListAdapter);
     }
 }
