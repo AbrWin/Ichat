@@ -1,6 +1,6 @@
 package com.abrsoftware.ichat.contact;
 
-import com.abrsoftware.ichat.contact.eventcontact.ContactEvent;
+import com.abrsoftware.ichat.contact.eventcontact.ContactListEvent;
 import com.abrsoftware.ichat.entities.User;
 import com.abrsoftware.ichat.lib.Eventbus;
 import com.abrsoftware.ichat.lib.GreenRobotEventBus;
@@ -68,15 +68,15 @@ public class ContactPresenterImp implements ContactMvp.Presenter {
 
     @Subscribe
     @Override
-    public void onEventMainThread(ContactEvent event) {
+    public void onEventMainThread(ContactListEvent event) {
         switch (event.getEventType()){
-            case ContactEvent.onContacAdded:
+            case ContactListEvent.onContacAdded:
                 onContacAdded(event.getUser());
                 break;
-            case ContactEvent.onContacChanged:
+            case ContactListEvent.onContacChanged:
                 onContacChanged(event.getUser());
                 break;
-            case ContactEvent.onContacRemove:
+            case ContactListEvent.onContacRemove:
                 onContacRemove(event.getUser());
                 break;
         }

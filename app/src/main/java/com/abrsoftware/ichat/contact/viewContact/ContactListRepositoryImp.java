@@ -2,8 +2,12 @@ package com.abrsoftware.ichat.contact.viewContact;
 
 import android.text.TextUtils;
 
-import com.abrsoftware.ichat.contact.ContactRepository;
+import com.abrsoftware.ichat.contact.ContactListRepository;
+import com.abrsoftware.ichat.contact.eventcontact.ContactListEvent;
 import com.abrsoftware.ichat.domain.FireBaseHelper;
+import com.abrsoftware.ichat.entities.User;
+import com.abrsoftware.ichat.lib.Eventbus;
+import com.abrsoftware.ichat.lib.GreenRobotEventBus;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -13,13 +17,15 @@ import com.google.firebase.database.DatabaseError;
  * Created by AbrWin on 29/11/16.
  */
 
-public class ContactRepoImp implements ContactRepository {
+public class ContactListRepositoryImp implements ContactListRepository {
+    private Eventbus eventbus;
     private FireBaseHelper helper;
     private FirebaseUser userReference;
     private ChildEventListener contactEventListener;
 
 
-    public ContactRepoImp() {
+    public ContactListRepositoryImp() {
+        this.eventbus = GreenRobotEventBus.getInstance();
         this.helper = FireBaseHelper.getInstance();
         this.userReference = helper.getAuthReference().getCurrentUser();
     }
@@ -46,36 +52,38 @@ public class ContactRepoImp implements ContactRepository {
             contactEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
+                    handleContact(dataSnapshot, ContactListEvent.onContacAdded);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                    handleContact(dataSnapshot, ContactListEvent.onContacChanged);
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                    handleContact(dataSnapshot, ContactListEvent.onContacRemove);
                 }
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                    //Move a branch to other
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    //Cancel requisition
                 }
             };
+        }else {
+            helper.getMyUserDataReference().addChildEventListener(contactEventListener);
         }
     }
 
     @Override
     public void unsubscribeContactLisctEvent() {
         if(contactEventListener != null){
-
+            helper.getMyUserDataReference().removeEventListener(contactEventListener);
         }
     }
 
@@ -94,4 +102,24 @@ public class ContactRepoImp implements ContactRepository {
             helper.getOneContactReference(mail, currentUserEmail).removeValue();
         }
     }
+
+
+    private void handleContact(DataSnapshot dataSnapshot, int type){
+        String email = dataSnapshot.getKey();
+        email = email.replace("_",".");
+        boolean online= ((Boolean)dataSnapshot.getValue()).booleanValue();
+        User user = new User();
+        user.setEmail(email);
+        user.setOnline(online);
+        post(type, user);
+
+    }
+
+    private void post(int onContacAdded, User user) {
+        ContactListEvent contactListEvent = new ContactListEvent();
+        contactListEvent.setEventType(onContacAdded);
+        contactListEvent.setUser(user);
+        eventbus.post(contactListEvent);
+    }
+
 }

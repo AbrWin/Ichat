@@ -4,7 +4,7 @@ package com.abrsoftware.ichat.contact;
  * Created by AbrWin on 22/11/16.
  */
 
-public interface ContactRepository {
+public interface ContactListRepository {
     void signOff();
     String getCurrentUserMail();
     void changeConnectionStatus(boolean status);

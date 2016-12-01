@@ -1,35 +1,35 @@
 package com.abrsoftware.ichat.contact;
 
-import com.abrsoftware.ichat.contact.viewContact.ContactRepoImp;
+import com.abrsoftware.ichat.contact.viewContact.ContactListRepositoryImp;
 
 /**
  * Created by AbrWin on 25/11/16.
  */
 
 public class ContactInteractorImp implements ContactInteractor {
-    ContactRepository contactRepository;
+    ContactListRepository contactListRepository;
 
     public ContactInteractorImp(){
-        contactRepository = new ContactRepoImp();
+        contactListRepository = new ContactListRepositoryImp();
     }
 
     @Override
     public void subscribeContactLisctEvent() {
-        contactRepository.subscribeContactLisctEvent();
+        contactListRepository.subscribeContactLisctEvent();
     }
 
     @Override
     public void unsubscribeContactLisctEvent() {
-        contactRepository.unsubscribeContactLisctEvent();
+        contactListRepository.unsubscribeContactLisctEvent();
     }
 
     @Override
     public void destroyListener() {
-        contactRepository.destroyListener();
+        contactListRepository.destroyListener();
     }
 
     @Override
     public void removeContact(String mail) {
-        contactRepository.removeContact(mail);
+        contactListRepository.removeContact(mail);
     }
 }

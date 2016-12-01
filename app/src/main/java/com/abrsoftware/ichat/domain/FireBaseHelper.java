@@ -49,6 +49,13 @@ public class FireBaseHelper {
         return databaseReference;
     }
 
+    /**
+     * This method get reference from USER
+     * @return DataReference
+     */
+    public DatabaseReference getMyUserDataReference(){
+        return getUserReference(authReference.getCurrentUser().getEmail());
+    }
 
     /**
      * This method get one reference from child CONTACTS
@@ -75,6 +82,10 @@ public class FireBaseHelper {
         return referenceUser;
     }
 
+    /**
+     * Get all dataReference from Database Firebase
+     * @param reference
+     */
     public void getDataReference(String reference) {
         databaseReference.getReference(USERS_PATH).orderByChild(USERS_PATH).equalTo(reference).addListenerForSingleValueEvent(
                 new ValueEventListener() {
