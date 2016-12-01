@@ -107,7 +107,7 @@ public class ContactListRepositoryImp implements ContactListRepository {
     private void handleContact(DataSnapshot dataSnapshot, int type){
         String email = dataSnapshot.getKey();
         email = email.replace("_",".");
-        boolean online= ((Boolean)dataSnapshot.getValue()).booleanValue();
+        boolean online= Boolean.parseBoolean(dataSnapshot.getValue().toString());
         User user = new User();
         user.setEmail(email);
         user.setOnline(online);

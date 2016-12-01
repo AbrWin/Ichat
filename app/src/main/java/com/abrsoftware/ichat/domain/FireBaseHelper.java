@@ -77,7 +77,7 @@ public class FireBaseHelper {
         DatabaseReference referenceUser = null;
         if (!TextUtils.isEmpty(keyMail)) {
             String mail = keyMail.replace(".", "_");
-            referenceUser = databaseReference.getReference().getRoot().child(USERS_PATH).child(mail);
+            referenceUser = databaseReference.getReference(USERS_PATH).child(mail).child(CONTACTS_PATH);
         }
         return referenceUser;
     }

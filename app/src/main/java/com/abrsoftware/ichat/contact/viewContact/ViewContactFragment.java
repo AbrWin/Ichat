@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.abrsoftware.ichat.R;
@@ -21,6 +22,7 @@ import com.abrsoftware.ichat.contact.ContactPresenterImp;
 import com.abrsoftware.ichat.entities.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +40,9 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
 
     @BindView(R.id.empty_contacts_layout)
     public LinearLayout emptyContacts;
+
+    @BindView(R.id.frameLayout)
+    public FrameLayout frameLayout;
 
     private ContactListAdapter contactListAdapter;
 
@@ -128,13 +133,24 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
     }
 
     private void setAdapter(){
-         contactListAdapter = new ContactListAdapter(new ArrayList<User>(), this);
+
 
     }
 
     private void setRecycler( ) {
-        emptyContacts.setVisibility(View.GONE);
-        recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerContact.setAdapter(contactListAdapter);
+        User user = new User();
+        user.setEmail("hola@hotmail.com");
+        user.setOnline(true);
+        user.setUrlImge("https://plus.google.com/u/0/photos/118134043991575768190/albums/profile/6157722707080170066");
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        if(users.size()> 0){
+            frameLayout.setVisibility(View.VISIBLE);
+            contactListAdapter = new ContactListAdapter(users, this);
+            emptyContacts.setVisibility(View.GONE);
+            recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerContact.setAdapter(contactListAdapter);
+            contactListAdapter.notifyDataSetChanged();
+        }
     }
 }
