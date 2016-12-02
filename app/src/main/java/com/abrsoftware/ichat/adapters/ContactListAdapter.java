@@ -79,6 +79,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -88,15 +89,14 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         @Override
         public boolean onLongClick(View view) {
-            listener.onLongClick();
+            listener.onLongClick(this);
             return false;
         }
     }
 
     public interface onItemClickListener {
         void onClick(ContactHolder contactHolder);
-
-        void onLongClick();
+        void onLongClick(ContactHolder contactHolder);
     }
 
     public void add(User user) {

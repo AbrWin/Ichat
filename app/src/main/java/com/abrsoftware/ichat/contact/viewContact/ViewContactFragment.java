@@ -64,7 +64,6 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
         contactPresenter.onCreate();
         getActivity().setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setToolbar(rootView, contactPresenter.getCurrentUserEmail());
-        setAdapter();
         setRecycler();
         return rootView;
     }
@@ -120,23 +119,18 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
 
     @Override
     public void onClick(ContactListAdapter.ContactHolder contactHolder) {
-        contactHolder.contact.getEmail();
+        Log.d("onClick", contactHolder.contact.getEmail());
     }
 
     @Override
-    public void onLongClick() {
-
+    public void onLongClick(ContactListAdapter.ContactHolder contactHolder) {
+        contactPresenter.removeContact(contactHolder.contact.getEmail());
     }
 
     public void setToolbar(View rootView, String title) {
         toolbar.setTitle(title);
         toolbar.setTitleTextColor(Color.WHITE);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-    }
-
-    private void setAdapter(){
-
-
     }
 
     private void setRecycler( ) {
