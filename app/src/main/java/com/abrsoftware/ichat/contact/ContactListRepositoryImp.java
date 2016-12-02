@@ -75,9 +75,10 @@ public class ContactListRepositoryImp implements ContactListRepository {
                     //Cancel requisition
                 }
             };
-        }else {
-            helper.getMyUserDataReference().addChildEventListener(contactEventListener);
         }
+
+        helper.getMyUserDataReference().addChildEventListener(contactEventListener);
+
     }
 
     @Override
