@@ -1,6 +1,6 @@
 package com.abrsoftware.ichat.contact;
 
-import com.abrsoftware.ichat.contact.eventcontact.ContactEvent;
+import com.abrsoftware.ichat.contact.eventcontact.ContactListEvent;
 import com.abrsoftware.ichat.entities.User;
 
 /**
@@ -23,7 +23,7 @@ public class ContactMvp {
         String getCurrentUserEmail();
         void signOff();
         void removeContact(String email);
-        void onEventMainThread(ContactEvent event);
+        void onEventMainThread(ContactListEvent event);
     }
 
 }

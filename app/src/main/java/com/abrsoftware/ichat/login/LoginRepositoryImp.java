@@ -164,6 +164,7 @@ public class LoginRepositoryImp implements LoginRepository {
                     User currentUser = new User();
                     currentUser.setEmail(email);
                     currentUser.setOnline(true);
+                    // TODO: Add child otherwise example abr@7_com--> abr@_7.com : true;
                     String keyEmail = email.replace(".","_");
                     mDatabase.child(keyEmail).setValue(currentUser);
                     postEvent(LoginEvent.onSignInSucces, "Inicio sesion");

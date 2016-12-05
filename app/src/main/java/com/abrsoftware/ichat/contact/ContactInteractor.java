@@ -5,8 +5,8 @@ package com.abrsoftware.ichat.contact;
  */
 
 public interface ContactInteractor {
-    void subscribe();
-    void unsubscribe();
+    void subscribeContactLisctEvent();
+    void unsubscribeContactLisctEvent();
     void destroyListener();
     void removeContact(String mail);
 }

@@ -48,4 +48,14 @@ public class User {
     public void setUrlImge(String urlImge) {
         this.urlImge = urlImge;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = false;
+        if(obj instanceof User){
+            User recipe = (User)obj;
+            equal = this.email.equals(recipe.getEmail());
+        }
+        return equal;
+    }
 }
