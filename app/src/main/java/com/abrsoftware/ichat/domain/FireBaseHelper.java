@@ -65,7 +65,7 @@ public class FireBaseHelper {
      */
     public DatabaseReference getOneContactReference(String mainMail, String childMail) {
         String childKey = childMail.replace(".", "_");
-        return getUserReference(mainMail).child(CONTACTS_PATH).child(childKey);
+        return getUserReference(mainMail).child(childKey);
     }
 
     /**

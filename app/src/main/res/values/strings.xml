@@ -22,4 +22,7 @@
     <string name="img">img</string>
     <string name="title_home">My home</string>
     <string name="empty_recycler">¡Ups! Aun no tienes contactos\n <b>¡Empieza a agregar! </b></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hint_dialog_add">Registra un correo!</string>
 </resources>
