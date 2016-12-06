@@ -2,7 +2,6 @@ package com.abrsoftware.ichat.contact;
 
 import android.text.TextUtils;
 
-import com.abrsoftware.ichat.contact.ContactListRepository;
 import com.abrsoftware.ichat.contact.eventcontact.ContactListEvent;
 import com.abrsoftware.ichat.domain.FireBaseHelper;
 import com.abrsoftware.ichat.entities.User;
@@ -77,14 +76,14 @@ public class ContactListRepositoryImp implements ContactListRepository {
             };
         }
 
-        helper.getMyUserDataReference().addChildEventListener(contactEventListener);
+        helper.getMyContactReference().addChildEventListener(contactEventListener);
 
     }
 
     @Override
     public void unsubscribeContactLisctEvent() {
         if(contactEventListener != null){
-            helper.getMyUserDataReference().removeEventListener(contactEventListener);
+            helper.getMyContactReference().removeEventListener(contactEventListener);
         }
     }
 

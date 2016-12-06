@@ -3,17 +3,12 @@ package com.abrsoftware.ichat.domain;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.abrsoftware.ichat.entities.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by AbrWin on 04/11/16.
@@ -53,8 +48,8 @@ public class FireBaseHelper {
      * This method get reference from USER
      * @return DataReference
      */
-    public DatabaseReference getMyUserDataReference(){
-        return getUserReference(authReference.getCurrentUser().getEmail());
+    public DatabaseReference getMyContactReference(){
+        return getContacReference(authReference.getCurrentUser().getEmail());
     }
 
     /**
@@ -65,7 +60,7 @@ public class FireBaseHelper {
      */
     public DatabaseReference getOneContactReference(String mainMail, String childMail) {
         String childKey = childMail.replace(".", "_");
-        return getUserReference(mainMail).child(childKey);
+        return getContacReference(mainMail).child(childKey);
     }
 
     /**
@@ -73,7 +68,7 @@ public class FireBaseHelper {
      * @param keyMail
      * @return
      */
-    public DatabaseReference getUserReference(String keyMail) {
+    public DatabaseReference getContacReference(String keyMail) {
         DatabaseReference referenceUser = null;
         if (!TextUtils.isEmpty(keyMail)) {
             String mail = keyMail.replace(".", "_");

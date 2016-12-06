@@ -22,7 +22,6 @@
 
     <style name="addContactDialog" parent="Theme.AppCompat.Light">
         <item name="android:textColorHint">@color/colorAccent</item>
-        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="android:editTextColor">@color/colorAccent</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="colorAccent">@color/colorAccent</item>
