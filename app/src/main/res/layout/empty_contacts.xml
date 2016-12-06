@@ -15,8 +15,7 @@
         android:layout_height="160dp"
         android:contentDescription="@string/app_login"
         android:scaleType="fitXY"
-        android:tint="@android:color/holo_blue_light"
-        app:srcCompat="@drawable/ic_package_variant_closed" />
+        app:srcCompat="@drawable/ic_chat" />
 
     <TextView
         android:id="@+id/textView"

@@ -25,4 +25,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hint_dialog_add">Registra un correo!</string>
+
+    <string name="add_mesagge_tittle">Agregar contacto</string>
+    <string name="add_accept">Aceptar</string>
+    <string name="add_cancel">Cancelar</string>
+    <string name="add_success_contactadded">Contacto agregado exitosamente</string>
+    <string name="add_error_contact">Imposiblre agregar usuario no existente</string>
 </resources>

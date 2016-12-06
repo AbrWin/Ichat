@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 
 import com.abrsoftware.ichat.R;
 import com.abrsoftware.ichat.adapters.ContactListAdapter;
+import com.abrsoftware.ichat.addcontact.viewdialog.AddContactFragment;
 import com.abrsoftware.ichat.contact.ContactMvp;
 import com.abrsoftware.ichat.contact.ContactPresenterImp;
 import com.abrsoftware.ichat.entities.User;
@@ -99,6 +100,13 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
     @Override
     public void onContactAdded(User user) {
         contactListAdapter.add(user);
+        if(contactListAdapter.getItemCount() > 0){
+            emptyContacts.setVisibility(View.GONE);
+            frameLayout.setVisibility(View.VISIBLE);
+        }else {
+            frameLayout.setVisibility(View.GONE);
+            emptyContacts.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -109,11 +117,18 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
     @Override
     public void onContactRemove(User user) {
         contactListAdapter.remove(user);
+        if(contactListAdapter.getItemCount() == 0){
+            frameLayout.setVisibility(View.GONE);
+            emptyContacts.setVisibility(View.VISIBLE);
+        }else {
+            emptyContacts.setVisibility(View.GONE);
+            frameLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.addContact)
     public void addContact() {
-        Log.d("msj", "add");
+       new AddContactFragment().show(getActivity().getSupportFragmentManager(), getString(R.string.add_mesagge_tittle));
     }
 
 
@@ -134,18 +149,8 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
     }
 
     private void setRecycler( ) {
-        /*User user = new User();
-        user.setEmail("hola@hotmail.com");
-        user.setOnline(true);
-        user.setUrlImge("http://image.freepik.com/free-icon/male-user-shadow_318-34042.jpg");
-        List<User> users = new ArrayList<>();
-        users.add(user);
-        if(users.size()> 0){
-        }*/
-
         frameLayout.setVisibility(View.VISIBLE);
         contactListAdapter = new ContactListAdapter(new ArrayList<User>(), this);
-        emptyContacts.setVisibility(View.GONE);
         recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerContact.setAdapter(contactListAdapter);
         contactListAdapter.notifyDataSetChanged();

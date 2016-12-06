@@ -8,23 +8,25 @@
         android:id="@+id/wrappe_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        android:theme="@style/addContactDialog">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
             android:hint="@string/hint_dialog_add"
-            android:id="@+id/input_email"/>
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
 
     <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
         android:id="@+id/addContactProgressbar"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </FrameLayout>
