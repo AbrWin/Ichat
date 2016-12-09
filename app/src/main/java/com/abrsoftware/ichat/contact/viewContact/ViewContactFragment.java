@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,12 +20,12 @@ import android.widget.LinearLayout;
 import com.abrsoftware.ichat.R;
 import com.abrsoftware.ichat.adapters.ContactListAdapter;
 import com.abrsoftware.ichat.addcontact.viewdialog.AddContactFragment;
+import com.abrsoftware.ichat.chat.view.ViewChatFragment;
 import com.abrsoftware.ichat.contact.ContactMvp;
 import com.abrsoftware.ichat.contact.ContactPresenterImp;
 import com.abrsoftware.ichat.entities.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +65,7 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
         contactPresenter = new ContactPresenterImp(this);
         contactPresenter.onCreate();
         getActivity().setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setToolbar(rootView, contactPresenter.getCurrentUserEmail());
+        setToolbar(contactPresenter.getCurrentUserEmail());
         setRecycler();
         return rootView;
     }
@@ -135,6 +136,16 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
     @Override
     public void onClick(ContactListAdapter.ContactHolder contactHolder) {
         Log.d("onClick", contactHolder.contact.getEmail());
+        FragmentTransaction  fragmentTransaction= getActivity().getSupportFragmentManager().beginTransaction();
+        ViewChatFragment chatFragment = new ViewChatFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("tittle", contactHolder.contact.getEmail());
+
+        chatFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container, chatFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -142,7 +153,7 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
         contactPresenter.removeContact(contactHolder.contact.getEmail());
     }
 
-    public void setToolbar(View rootView, String title) {
+    public void setToolbar(String title) {
         toolbar.setTitle(title);
         toolbar.setTitleTextColor(Color.WHITE);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);

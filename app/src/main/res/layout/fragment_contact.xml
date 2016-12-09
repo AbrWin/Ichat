@@ -5,25 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_back_content"
-    android:fitsSystemWindows="true"
     tools:context="com.abrsoftware.ichat.contact.viewContact.ViewContactFragment">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:gravity="center_vertical"
-            app:popupTheme="@style/AppTheme">
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/toolbar" />
 
     <include
         android:id="@+id/empty_contacts_layout"

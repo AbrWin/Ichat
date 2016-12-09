@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -59,6 +60,10 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
     @Nullable
     @BindView(R.id.til_password_error)
     public TextInputLayout mPasswordError;
+
+    @Nullable
+    @BindView(R.id.fragment_container)
+    public FrameLayout frameLayout;
 
     private LoginMvp.Presenter loginPresenter;
     private Context context;
@@ -176,11 +181,12 @@ public class LoginActivity extends AppCompatActivity implements LoginMvp.View {
             public void run() {
                 //Go to HomeScreen
                 //Snackbar.make(mLoginContent, msg, Snackbar.LENGTH_SHORT).show();
+                frameLayout.setVisibility(View.VISIBLE);
                 ViewContactFragment contactFragment = new ViewContactFragment();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = manager.beginTransaction();
                 fragmentTransaction.remove(contactFragment);
-                fragmentTransaction.add(android.R.id.content, contactFragment);
+                fragmentTransaction.add(R.id.fragment_container, contactFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
