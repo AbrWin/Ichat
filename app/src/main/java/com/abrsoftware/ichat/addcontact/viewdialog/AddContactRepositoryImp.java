@@ -32,7 +32,7 @@ public class AddContactRepositoryImp implements AddContactRepository {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                if(user == null){
+                if(user != null){
                     //Add to my reference
                     DatabaseReference myContactReference = helper.getMyContactReference();
                     myContactReference.child(keyEmail).setValue(true);

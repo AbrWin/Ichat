@@ -102,7 +102,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public void add(User user) {
         if (!values.contains(user)) {
             values.add(user);
-            notifyDataSetChanged();
+            int index = values.indexOf(user);
+            notifyItemInserted(index);
         }
     }
 
@@ -110,14 +111,14 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         if (values.contains(user)) {
             int index = values.indexOf(user);
             values.set(index, user);
-            notifyDataSetChanged();
         }
     }
 
     public void remove(User user) {
         if (values.contains(user)) {
+            int index = values.indexOf(user);
             values.remove(user);
-            notifyDataSetChanged();
+            notifyItemRemoved(index);
         }
     }
 
