@@ -1,9 +1,11 @@
 package com.abrsoftware.ichat.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +41,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return new ContactHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(ContactHolder holder, int position) {
         holder.contact = values.get(position);
@@ -48,7 +50,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         holder.contactEmail.setText(holder.contact.getEmail());
         holder.contactStatus.setTextColor(isOnline ? ContextCompat.getColor(context,R.color.online_color) : ContextCompat.getColor(context, R.color.offline_color));
         holder.contactStatus.setText(isOnline ? context.getString(R.string.status_online) : context.getString(R.string.status_offline));
-
+        holder.cardView.setCardBackgroundColor(Color.parseColor("#ffffcc"));
         Glide.with(context)
                 .load(holder.contact.getUrlImge())
                 .placeholder(context.getDrawable(R.drawable.common_google_signin_btn_icon_dark))
@@ -72,6 +74,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         @BindView(R.id.contactStatus)
         public TextView contactStatus;
+
+        @BindView(R.id.cardContent)
+        public CardView cardView;
 
         public User contact;
 
@@ -102,15 +107,16 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public void add(User user) {
         if (!values.contains(user)) {
             values.add(user);
-            int index = values.indexOf(user);
-            notifyItemInserted(index);
+            int position = values.indexOf(user);
+            notifyItemInserted(position);
         }
     }
 
     public void update(User user) {
         if (values.contains(user)) {
-            int index = values.indexOf(user);
-            values.set(index, user);
+            int position = values.indexOf(user);
+            values.set(position, user);
+            notifyItemChanged(position);
         }
     }
 

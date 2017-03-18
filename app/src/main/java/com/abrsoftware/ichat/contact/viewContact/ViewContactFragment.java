@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.abrsoftware.ichat.Animation.MyItemAnimator;
 import com.abrsoftware.ichat.R;
 import com.abrsoftware.ichat.adapters.ContactListAdapter;
 import com.abrsoftware.ichat.addcontact.viewdialog.AddContactFragment;
@@ -164,6 +166,7 @@ public class ViewContactFragment extends Fragment implements ContactMvp.View, Co
         contactListAdapter = new ContactListAdapter(new ArrayList<User>(), this);
         recyclerContact.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerContact.setAdapter(contactListAdapter);
+        recyclerContact.setItemAnimator(new MyItemAnimator());
         contactListAdapter.notifyDataSetChanged();
     }
 }
